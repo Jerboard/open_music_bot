@@ -4,6 +4,7 @@ from moviepy.editor import AudioFileClip
 import os
 
 from config import Config as cfg
+from enums import SoundType
 
 
 # проверка длинны видео ссылки на ютуб
@@ -14,7 +15,7 @@ def download_audio(link: str):
     yt = YouTube(link)
     audio = yt.streams.filter (only_audio=True).get_audio_only()
     audio.download (cfg.download_path)
-    return os.path.join (cfg.download_path, audio.default_filename)
+    return os.path.join (cfg.download_path, audio.default_filename), audio.default_filename[:-4]
 
 
 # конвертирует видео в аудио
