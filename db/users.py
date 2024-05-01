@@ -15,7 +15,7 @@ class ProfileRow(t.Protocol):
 
 
 ProfilesTable: sa.Table = sa.Table(
-    "profiles",
+    "users",
     METADATA,
     sa.Column ("created_at", sa.TIMESTAMP (), nullable=False, server_default="now()"),
     sa.Column ("last_activity", sa.TIMESTAMP (), nullable=False, server_default="now()"),
