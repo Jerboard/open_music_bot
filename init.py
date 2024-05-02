@@ -42,7 +42,6 @@ DATE_FORMAT = getenv('DATE_FORMAT')
 TIME_FORMAT = getenv('TIME_FORMAT')
 
 
-
 async def set_main_menu():
     main_menu_commands = [
         BotCommand(command='/start',
@@ -64,6 +63,6 @@ def log_error(message, with_traceback: bool = True):
     logging.basicConfig (level=logging.WARNING, filename=log_file_path, encoding='utf-8')
     if with_traceback:
         ex_traceback = traceback.format_exc()
-        logging.warning(f'=====\n{now}\n{ex_traceback}\n{message}\n=====')
+        logging.warning(f'{now}\n{ex_traceback}\n{message}\n=======================\n')
     else:
-        logging.warning(f'=====\n{now}\n{message}\n=====')
+        logging.warning(f'{now}\n{message}\n=====================\n')

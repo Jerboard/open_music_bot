@@ -10,6 +10,7 @@ import keyboards as kb
 from init import dp
 from config import Config
 from utils.youtube_utils import download_audio, convert
+from enums import BaseCB
 
 
 # первый экран
@@ -25,3 +26,20 @@ async def command_start_handler(msg: Message, state: FSMContext) -> None:
             'Скоро тут будет какой-то полезный текст или твоя статистика, но пока нужно создать сам бот)')
 
     await msg.answer(text=text, reply_markup=kb.get_main_user_kb())
+
+
+# вернуться к старту
+@dp.callback_query(lambda cb: cb.data.startswith(BaseCB.BACK_START.value))
+async def my_music_performer(cb: CallbackQuery):
+    text = ('Привет, друг!Это бот для хранения и скачивания с Ютуба твоей любимой музыки,подкастов и аудиокниг\n\n'
+            'Скоро тут будет какой-то полезный текст или твоя статистика, но пока нужно создать сам бот)')
+
+    await cb.message.edit_text (text=text, reply_markup=kb.get_main_user_kb ())
+
+
+# в работе
+@dp.callback_query(lambda cb: cb.data.startswith('in_dev'))
+async def my_music_performer(cb: CallbackQuery):
+    text = '🛠 Функция в разработке'
+
+    await cb.message.edit_text (text=text, reply_markup=kb.get_main_user_kb ())

@@ -16,7 +16,7 @@ def get_main_user_kb() -> InlineKeyboardMarkup:
 # клава с исполнителями
 def get_performer_kb(music: tuple[db.TrackRow]) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder ()
-    kb.button (text='🔙 Назад', callback_data='in_dev')
+    kb.button (text='🔙 Назад', callback_data=BaseCB.BACK_START.value)
     ex_list = []
     for performer in music:
         if performer.performer not in ex_list:
