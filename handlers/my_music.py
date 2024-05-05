@@ -9,7 +9,7 @@ import db
 import keyboards as kb
 from init import dp
 from config import Config
-from utils.youtube_utils import download_audio, convert
+from utils.youtube_utils import download_audio
 from enums import BaseCB
 
 

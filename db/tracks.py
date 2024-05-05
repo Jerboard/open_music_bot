@@ -90,13 +90,25 @@ async def update_track(
 
 # добавить файл
 async def get_tracks(
-        user_id: int,
+        user_id: int = None,
         performer: str = None
 ) -> tuple[TrackRow]:
-    query = TrackTable.select().where(TrackTable.c.user_id == user_id)
+    query = TrackTable.select()
 
     if performer:
         query = query.where(TrackTable.c.performer == performer)
+    if user_id:
+        query = query.where(TrackTable.c.user_id == user_id)
+
+    async with begin_connection() as conn:
+        result = await conn.execute(query)
+
+    return result.all()
+
+
+# поиск треков
+async def search_tracks(request: str = '') -> tuple[TrackRow]:
+    query = (TrackTable.select ().where (TrackTable.c.title.ilike (f'%{request}%')).limit(10))
 
     async with begin_connection() as conn:
         result = await conn.execute(query)
@@ -105,7 +117,7 @@ async def get_tracks(
 
 
 # добавить файл
-async def get_track(track_id: int) -> TrackRow:
+async def get_track(track_id: int = None) -> TrackRow:
     query = TrackTable.select().where(TrackTable.c.id == track_id)
 
     async with begin_connection() as conn:

@@ -15,7 +15,6 @@ from utils.youtube_utils import download_audio
 from enums import SoundType
 
 
-
 # сохраняет присланные треки
 @dp.message(lambda msg: msg.content_type == ContentType.AUDIO)
 async def save_music(msg: Message) -> None:
@@ -66,18 +65,17 @@ async def download_music(msg: Message) -> None:
         return
 
     sent = await msg.answer ('Ща...')
-    file_path, file_name = download_audio (youtube_link)
+    new_track = download_audio (youtube_link)
 
-    audio = FSInputFile (file_path)
-    sent_audio = await msg.answer_audio (audio=audio, title=file_name)
+    audio = FSInputFile (new_track.filepath)
+    sent_audio = await msg.answer_audio (audio=audio, title=new_track.title)
 
     await sent.edit_text('Лови! Теперь трек доступен в лк бота')
-    await msg.answer (text)
 
     await db.add_track (
         user_id=msg.from_user.id,
-        performer=sent_audio.audio.performer,
-        title=sent_audio.audio.title,
+        performer=new_track.performer,
+        title=new_track.title,
         file_name=sent_audio.audio.file_name,
         mime_type=sent_audio.audio.mime_type,
         file_size=sent_audio.audio.file_size,
@@ -86,5 +84,5 @@ async def download_music(msg: Message) -> None:
         entry_type=SoundType.MUSIC.value
     )
     await asyncio.sleep(1)
-    os.remove(file_path)
+    os.remove(new_track.filepath)
 

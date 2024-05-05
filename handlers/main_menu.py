@@ -9,7 +9,7 @@ import db
 import keyboards as kb
 from init import dp
 from config import Config
-from utils.youtube_utils import download_audio, convert
+from utils.youtube_utils import download_audio
 from enums import BaseCB
 
 
@@ -42,4 +42,4 @@ async def my_music_performer(cb: CallbackQuery):
 async def my_music_performer(cb: CallbackQuery):
     text = '🛠 Функция в разработке'
 
-    await cb.message.edit_text (text=text, reply_markup=kb.get_main_user_kb ())
+    await cb.answer (text=text, show_alert=True)
