@@ -1,4 +1,4 @@
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
 
@@ -9,7 +9,7 @@ import db
 import keyboards as kb
 from init import dp
 from config import Config
-from utils.youtube_utils import download_audio
+from utils.video_utils import download_audio
 from enums import BaseCB
 
 
@@ -35,6 +35,21 @@ async def my_music_performer(cb: CallbackQuery):
             'Скоро тут будет какой-то полезный текст или твоя статистика, но пока нужно создать сам бот)')
 
     await cb.message.edit_text (text=text, reply_markup=kb.get_main_user_kb ())
+
+
+# возвращает случайный сет
+@dp.message(Command('10_my_track'))
+@dp.message(Command('10_random_track'))
+async def get_random_set(msg: Message, state: FSMContext) -> None:
+    await state.clear()
+
+    if msg.text == '/10_my_track':
+        tracks = await db.get_tracks(limit=10, user_id=msg.from_user.id)
+    else:
+        tracks = await db.get_tracks(limit=10)
+
+    for track in tracks:
+        await msg.answer_audio (audio=track.file_id, performer=track.performer, title=track.title)
 
 
 # в работе

@@ -1,11 +1,19 @@
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
+import typing as t
 
 import os
 
 from config import Config as cfg
 from utils.objects import Track
 from enums import SoundType
+
+
+# определеят название и исполнителя
+def hand_yt_video_name(video_name: str) -> t.Union[list[str], str]:
+    name_split = video_name.split(' - ')
+    if len(name_split) == 2:
+        return name_split
 
 
 # проверка длинны видео ссылки на ютуб
@@ -15,13 +23,20 @@ def download_audio(link: str) -> Track:
 
     yt = YouTube(link)
     audio = yt.streams.filter (only_audio=True).get_audio_only()
-    title_audio = audio.title
-    author_audio = yt.author
+
+    name_split = audio.title.split (' - ')
+    if len (name_split) == 2:
+        title_audio = name_split[0]
+        performer = name_split[1]
+    else:
+        title_audio = audio.title
+        performer = None
+
     audio.download (cfg.download_path)
     # return os.path.join (cfg.download_path, audio.default_filename), audio.default_filename[:-4]
     return Track(
         title=title_audio,
-        performer=author_audio,
+        performer=performer,
         filepath=os.path.join (cfg.download_path, audio.default_filename),
     )
 

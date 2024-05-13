@@ -44,8 +44,9 @@ TIME_FORMAT = getenv('TIME_FORMAT')
 
 async def set_main_menu():
     main_menu_commands = [
-        BotCommand(command='/start',
-                   description='Перезапустить')
+        BotCommand(command='/start', description='Перезапустить'),
+        BotCommand(command='/10_my_track', description='Случайные 10 треков (Моя музыка)'),
+        BotCommand(command='/10_random_track', description='Случайные 10 треков')
     ]
 
     await bot.set_my_commands(main_menu_commands)

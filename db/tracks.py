@@ -91,7 +91,8 @@ async def update_track(
 # добавить файл
 async def get_tracks(
         user_id: int = None,
-        performer: str = None
+        performer: str = None,
+        limit: int = None
 ) -> tuple[TrackRow]:
     query = TrackTable.select()
 
@@ -99,6 +100,8 @@ async def get_tracks(
         query = query.where(TrackTable.c.performer == performer)
     if user_id:
         query = query.where(TrackTable.c.user_id == user_id)
+    if limit:
+        query = query.limit(limit=limit)
 
     async with begin_connection() as conn:
         result = await conn.execute(query)

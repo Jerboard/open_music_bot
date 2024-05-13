@@ -11,7 +11,7 @@ import asyncio
 import db
 # import keyboards as kb
 from init import dp, bot
-from utils.youtube_utils import download_audio
+from utils.video_utils import download_audio
 from enums import SoundType
 
 
@@ -72,6 +72,8 @@ async def download_music(msg: Message) -> None:
 
     await sent.edit_text('Лови! Теперь трек доступен в лк бота')
 
+    entry_type = SoundType.MUSIC.value if sent_audio.audio.duration < 10 else SoundType.PODCAST.value
+
     await db.add_track (
         user_id=msg.from_user.id,
         performer=new_track.performer,
@@ -81,7 +83,7 @@ async def download_music(msg: Message) -> None:
         file_size=sent_audio.audio.file_size,
         duration=sent_audio.audio.duration,
         file_id=sent_audio.audio.file_id,
-        entry_type=SoundType.MUSIC.value
+        entry_type=entry_type
     )
     await asyncio.sleep(1)
     os.remove(new_track.filepath)
